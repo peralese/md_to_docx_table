@@ -15,6 +15,7 @@ Unlike basic converters, this tool:
 ## 🚀 Features
 
 - ✅ Converts a single Markdown file into Word
+- ✅ (Optional) Converts all `.md` files in a folder → saves into `converted_docs/`
 - ✅ Outputs to the same folder, or to a custom output directory
 - ✅ Overwrite protection (`--force` flag required)
 - ✅ Supports:
@@ -52,7 +53,7 @@ pip install python-docx markdown beautifulsoup4
 
 ## ▶️ Usage
 
-### Basic conversion
+### Convert a single file
 
 ```bash
 python md_to_docx_table.py notes.md
@@ -73,6 +74,14 @@ python md_to_docx_table.py notes.md --out-dir converted_docs
 ```
 
 If `converted_docs/` doesn’t exist, it will be created.
+
+### Folder mode (all `.md` files in a folder)
+
+```bash
+python md_to_docx_table.py ./notes_folder
+```
+
+This creates a `converted_docs/` folder inside `notes_folder` and converts every `.md` inside.
 
 ### Overwrite protection
 

@@ -187,20 +187,42 @@ def md_to_docx(md_text: str, output_path: str):
 
 # ---------- CLI ----------
 
+def _prompt_for_input_file() -> str:
+    """Interactive prompt for a readable .md file."""
+    while True:
+        p = input("Enter path to input Markdown file (.md) or 'q' to quit: ").strip().strip('"')
+        if not p:
+            print("Please enter a path (or 'q' to quit).")
+            continue
+        if p.lower() in ("q", "quit", "exit"):
+            sys.exit(0)
+        if not os.path.isfile(p):
+            print(f"Not found: {p}")
+            continue
+        if not p.lower().endswith(".md"):
+            print("Please provide a .md file.")
+            continue
+        try:
+            with open(p, "r", encoding="utf-8"):
+                pass
+        except Exception as e:
+            print(f"Cannot read file: {e}")
+            continue
+        return os.path.abspath(p)
+
 def main():
     ap = argparse.ArgumentParser(
         prog="md_to_docx_table",
         description="Convert Markdown to DOCX with robust table handling."
     )
-    ap.add_argument("input", help="Path to input .md file")
+    # Make input optional; prompt if missing
+    ap.add_argument("input", nargs="?", help="Path to input .md file")
     ap.add_argument("-o", "--output", help="Path to output .docx file (default: alongside input)")
     ap.add_argument("--out-dir", help="Directory for the output .docx (overrides default location)")
     ap.add_argument("-f", "--force", action="store_true", help="Overwrite output if it exists")
     args = ap.parse_args()
 
-    inp = os.path.abspath(args.input)
-    if not os.path.isfile(inp):
-        print(f"Not found: {inp}"); sys.exit(1)
+    inp = os.path.abspath(args.input) if args.input else _prompt_for_input_file()
 
     base, _ = os.path.splitext(inp)
     outp = args.output or (base + ".docx")
@@ -220,4 +242,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
